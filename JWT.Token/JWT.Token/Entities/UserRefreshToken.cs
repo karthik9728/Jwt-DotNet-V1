@@ -17,7 +17,7 @@ namespace JWT.Token.Entities
         {
             get
             {
-                return ExpirationDate < DateTime.UtcNow;
+                return ExpirationDate > DateTime.UtcNow;
             }
         }
         public string IpAddress { get; set; }

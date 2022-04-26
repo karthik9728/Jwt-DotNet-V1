@@ -4,6 +4,8 @@ namespace JWT.Token.Services
 {
     public interface IJwtService
     {
-        Task<string> GetTokenAsync(AuthRequest authRequest);
+        Task<AuthResponce> GetTokenAsync(AuthRequest authRequest,string ipAddress);
+        Task<AuthResponce> GetRefreshTokenAsync(string ipAddress,int userId,string userName);
+        Task<bool> IsTokenValid(string accessToken,string ipAddress);
     }
 }

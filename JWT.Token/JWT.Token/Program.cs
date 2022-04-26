@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,6 +71,15 @@ builder.Services.AddAuthentication(authOptions =>
 }).AddJwtBearer(jwtOptions =>
 {
     jwtOptions.TokenValidationParameters = tokenValidation;
+    jwtOptions.Events = new JwtBearerEvents();
+    jwtOptions.Events.OnTokenValidated = async (context) =>
+    {
+        var ipAddress = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        var jwtService = context.Request.HttpContext.RequestServices.GetService<IJwtService>();
+        var jwtToken = context.SecurityToken as JwtSecurityToken;
+        if (!await jwtService.IsTokenValid(jwtToken.RawData, ipAddress))
+            context.Fail("InValid Token Details");
+    };
 });
 
 #region Serivces
