@@ -81,7 +81,7 @@ namespace JWT.Token.Services
                 {
                     new Claim(ClaimTypes.NameIdentifier,userName)
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(80),
+                Expires = DateTime.UtcNow.AddSeconds(180),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes),
                 SecurityAlgorithms.HmacSha256)
             };
